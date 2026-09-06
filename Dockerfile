@@ -11,21 +11,19 @@ RUN git clone https://github.com/LuxAlgo/vela-pinets.git vela-pinets
 WORKDIR /build/vela-core
 RUN npm install
 RUN npm run build
-# Le vite.config.ts a déjà root: 'playground', donc juste:
 RUN npx vite build --base /vela/
 
-# Build Vela PineTS  
+# Build Vela PineTS
 WORKDIR /build/vela-pinets
 RUN npm install
-# Idem, vite.config.ts pointe déjà vers playground
 RUN npx vite build --base /vela-pinets/
 
 # Image finale Nginx
 FROM nginx:alpine
 
-# Copie les fichiers buildés
-COPY --from=builder /build/vela-core/dist /usr/share/nginx/html/vela
-COPY --from=builder /build/vela-pinets/dist /usr/share/nginx/html/vela-pinets
+# ⚠️ Le dist est DANS playground/ (car vite.config.ts a root: 'playground')
+COPY --from=builder /build/vela-core/playground/dist /usr/share/nginx/html/vela
+COPY --from=builder /build/vela-pinets/playground/dist /usr/share/nginx/html/vela-pinets
 
 # Copie la config Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
