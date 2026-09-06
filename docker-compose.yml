@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  vela-apps:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vela-charts
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:80/vela/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
