@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: vela-charts
     ports:
-      - "8080:80"
+      - "2626:26"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:80/vela/"]
